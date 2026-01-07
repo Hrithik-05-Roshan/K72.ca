@@ -1,11 +1,56 @@
-import React from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/all'
+import React, { useRef } from 'react'
 
 const Agence = () => {
+  
+  gsap.registerPlugin(ScrollTrigger)
+
+  const imgDivRef = useRef(null)
+  const imageref =useRef(null)
+
+  const imgArr = [
+    '/images/Carl_480x640.jpg',
+    '/images/Olivier_480x640.jpg',
+    '/images/ChantalG_480x640.jpg',
+    '/images/Michele_480X640.jpg',
+    '/images/MEL_480X640.jpg',
+    '/images/CAMILLE_480X640_2.jpg',
+    '/images/MEGGIE_480X640_2.jpg',
+    '/images/joel_480X640_3.jpg',
+  ]
+
+  useGSAP(function(){
+    gsap.to(imgDivRef.current,{
+      scrollTrigger:{
+        trigger:imgDivRef.current,
+        start:'top 24.5%',
+        end : 'top -120%',
+        pin:true,
+        scrub:5,
+        onUpdate:function(elem){
+
+          let imageIndex;
+
+          if (elem.progress<1) {
+            imageIndex = Math.floor(elem.progress * imgArr.length)
+          }
+          else{
+            imageIndex = imgArr.length-1
+          }
+
+          imageref.current.src = imgArr[imageIndex]
+        }
+      } 
+    })
+  })
+
   return (
     <div>
       <div className="section1">
-        <div className="absolute h-[20vw] w-[15vw] rounded-3xl top-39 left-[30vw] overflow-hidden">
-          <img className='h-full w-full object-cover' src="https://k72.ca/images/teamMembers/Carl_480x640.jpg?w=480&h=640&fit=crop&s=f0a84706bc91a6f505e8ad35f520f0b7" alt="" />
+        <div ref={imgDivRef} className="absolute h-[20vw] w-[15vw] rounded-3xl top-39 left-[30vw] overflow-hidden">
+          <img ref={imageref} className='h-full w-full object-cover' src="/images/Carl_480x640.jpg" alt="" />
         </div>
         <div className='relative'>
           <div className='mt-[57vh] font-[font1]'>
@@ -16,7 +61,7 @@ const Agence = () => {
           </div>
         </div>
       </div>
-      <div className="section2">
+      <div className="section2 h-screen ">
         
       </div>
     </div>
